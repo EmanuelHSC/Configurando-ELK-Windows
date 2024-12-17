@@ -1,0 +1,743 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Configurando ELK Windows</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="15f58ca9-7d9f-8057-8601-d832cb6ea3c1" class="page sans"><header><h1 class="page-title">Configurando ELK Windows</h1><p class="page-description"></p></header><div class="page-body"><hr id="15f58ca9-7d9f-80cc-877c-e0fe83079082"/><h2 id="15f58ca9-7d9f-8030-af36-cc98a8018212" class=""><strong>Pré-requisitos</strong></h2><ol type="1" id="15f58ca9-7d9f-80d7-a68c-d66e6a73f981" class="numbered-list" start="1"><li><strong>Windows 11</strong> instalado.</li></ol><ol type="1" id="15f58ca9-7d9f-8010-bebd-f18b53b564b6" class="numbered-list" start="2"><li><strong>Java 8 ou superior</strong> (necessário para Logstash).</li></ol><ol type="1" id="15f58ca9-7d9f-80de-9e5c-d95cac879f7f" class="numbered-list" start="3"><li><strong>RAM</strong>: Mínimo 4 GB (ideal 8 GB+ para o ELK Stack rodar bem).</li></ol><ol type="1" id="15f58ca9-7d9f-80a4-a38a-fe2ccbec779c" class="numbered-list" start="4"><li><strong>Permissões de administrador</strong>.</li></ol><ol type="1" id="15f58ca9-7d9f-80ac-9c26-f79a4a059bc1" class="numbered-list" start="5"><li><strong>Elastic Stack</strong> (Elasticsearch, Logstash e Kibana).</li></ol><hr id="15f58ca9-7d9f-80dc-8958-dc755addbf40"/><h2 id="15f58ca9-7d9f-801e-9181-cf759f569df3" class=""><strong>Passo 1: Instalação do Java (pré-requisito para Logstash)</strong></h2><ol type="1" id="15f58ca9-7d9f-803d-9957-f2e99845c548" class="numbered-list" start="1"><li>Faça o download do <strong>Java JDK</strong>:<ul id="15f58ca9-7d9f-8001-8ce4-d15abcf79ca9" class="bulleted-list"><li style="list-style-type:disc">Acesse: <a href="https://adoptium.net/">Download OpenJDK</a> ou <a href="https://www.oracle.com/java/technologies/downloads/">Oracle JDK</a>.</li></ul><ul id="15f58ca9-7d9f-8050-be1c-d659f3f3a0a0" class="bulleted-list"><li style="list-style-type:disc">Baixe o instalador correspondente ao seu sistema (Windows x64).</li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-8078-9f0a-eb8b62ec1888" class="numbered-list" start="2"><li>Instale o Java JDK:<ul id="15f58ca9-7d9f-80cc-97d2-fdb8f9a2d67b" class="bulleted-list"><li style="list-style-type:disc">Siga as instruções no instalador.</li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-8043-b0e5-cfe012549d7e" class="numbered-list" start="3"><li>Configure a variável de ambiente <code>JAVA_HOME</code>:<ul id="15f58ca9-7d9f-80b1-8c43-cb3e2956cf17" class="bulleted-list"><li style="list-style-type:disc">Clique com o botão direito no <strong>Menu Iniciar</strong> → <strong>Sistema</strong> → <strong>Configurações avançadas do sistema</strong>.</li></ul><ul id="15f58ca9-7d9f-800e-bd7c-e971ff3c6f9a" class="bulleted-list"><li style="list-style-type:disc">Em <strong>Variáveis de Ambiente</strong>, adicione:<ul id="15f58ca9-7d9f-8002-a862-dca287f53ce5" class="bulleted-list"><li style="list-style-type:circle">Nome: <code>JAVA_HOME</code></li></ul><ul id="15f58ca9-7d9f-8051-864d-c531d64a702d" class="bulleted-list"><li style="list-style-type:circle">Valor: <code>C:\Program Files\Java\jdk-&lt;sua-versão&gt;</code>.</li></ul></li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-809e-84a9-e7fddfcb347b" class="numbered-list" start="4"><li>Teste a instalação:<br/>Abra o <br/><strong>Prompt de Comando (cmd)</strong> e digite:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-8069-9f15-d4f10a03a823" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">
+java -version
+
+</code></pre></li></ol><hr id="15f58ca9-7d9f-80c3-9c3b-df711b3c59bd"/><h2 id="15f58ca9-7d9f-80b8-92a3-d47a327b0e1e" class=""><strong>Passo 2: Instalação do Elasticsearch</strong></h2><ol type="1" id="15f58ca9-7d9f-8046-833a-e6081ba76a8e" class="numbered-list" start="1"><li>Baixe o Elasticsearch:<ul id="15f58ca9-7d9f-805e-894e-f60bb105627c" class="bulleted-list"><li style="list-style-type:disc">Acesse: <a href="https://www.elastic.co/downloads/elasticsearch">Elastic Downloads</a>.</li></ul><ul id="15f58ca9-7d9f-8077-bbc8-f6b6e8658813" class="bulleted-list"><li style="list-style-type:disc">Baixe o <strong>ZIP</strong> da versão mais recente.</li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-801b-9834-e628d5fa5965" class="numbered-list" start="2"><li>Extraia o arquivo em uma pasta, por exemplo:<p id="15f58ca9-7d9f-809d-8502-e3555aee43f9" class=""><code>C:\elk\elasticsearch</code></p></li></ol><ol type="1" id="15f58ca9-7d9f-8077-b424-d2aa269c98c3" class="numbered-list" start="3"><li>Configure o arquivo <code>elasticsearch.yml</code>:<ul id="15f58ca9-7d9f-8010-b8f3-d8dcd1f09387" class="bulleted-list"><li style="list-style-type:disc">Acesse <code>C:\elk\elasticsearch\config\elasticsearch.yml</code> com um editor de texto (como VSCode ou Notepad++).</li></ul><ul id="15f58ca9-7d9f-806c-8ca0-e43c6f7c5ac5" class="bulleted-list"><li style="list-style-type:disc">Adicione ou modifique as seguintes linhas:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-80da-88c1-ca263dbaa1d6" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">
+network.host: 127.0.0.1
+http.port: 9200
+
+</code></pre></li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-8051-8b6e-d1d613f7cb6d" class="numbered-list" start="4"><li>Inicie o Elasticsearch:<ul id="15f58ca9-7d9f-8036-82eb-e74027384d85" class="bulleted-list"><li style="list-style-type:disc">No <strong>Prompt de Comando</strong>, vá até a pasta <code>bin</code>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-808e-9fe0-c1cf7157a4ea" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">
+cd C:\elk\elasticsearch\bin
+elasticsearch.bat
+
+-- Aqui confira o caminho, na minha maquina o caminho era cd C:\elk\elasticsearch\elasticsearch-8.17.0-windows-x86_64\elasticsearch-8.17.0\bin
+
+</code></pre></li></ul><ul id="15f58ca9-7d9f-8068-8f94-f8b77a114705" class="bulleted-list"><li style="list-style-type:disc">Aguarde a inicialização (leva alguns minutos).</li></ul><ul id="15f58ca9-7d9f-804d-86be-ec397c0000bd" class="bulleted-list"><li style="list-style-type:disc">Teste no navegador:Acesse http://localhost:9200.Deverá aparecer um JSON com as informações do Elasticsearch.</li></ul><ul id="15f58ca9-7d9f-8090-8cee-d4e82bd6f5d5" class="bulleted-list"><li style="list-style-type:disc">Obs: Se der erro tente https://localhost:9200, vai ser necessário uma senha, então faça:<br/><br/></li></ul><ol type="1" id="15f58ca9-7d9f-80c3-b39c-d2a47d1689e8" class="numbered-list" start="1"><li>Abra o <strong>Prompt de Comando (cmd)</strong> ou <strong>PowerShell</strong>.</li></ol><ol type="1" id="15f58ca9-7d9f-808f-89cb-feb117d0e63a" class="numbered-list" start="2"><li>Navegue até a pasta <code>bin</code> do Elasticsearch:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-8068-9f2a-ea6d82ace41b" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">
+cd C:\elk\elasticsearch\bin
+
+-- Lembre de mudar seu C: para o caminho da sua maquina
+</code></pre></li></ol><ol type="1" id="15f58ca9-7d9f-8028-8ed5-e945c4411f81" class="numbered-list" start="3"><li>Execute o seguinte comando para redefinir a senha do usuário <code>elastic</code>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-80af-84d2-cec0293ac102" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">
+elasticsearch-reset-password -u elastic
+
+</code></pre></li></ol><ol type="1" id="15f58ca9-7d9f-8059-9651-d7fb7e816516" class="numbered-list" start="4"><li><strong>Resultado esperado</strong>:<br/>O comando vai gerar uma nova senha. A saída será algo assim:<br/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-80ae-ae83-f2cce7c2f105" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">
+Password for the [elastic] user successfully reset.
+New value: 4h8dT#xk2oB9QhYl
+
+</code></pre></li></ol></li></ol><hr id="15f58ca9-7d9f-8003-930d-c3a2b959662c"/><h2 id="15f58ca9-7d9f-8062-b0aa-f9e3f9c67048" class=""><strong>Passo 3: Instalação do Kibana</strong></h2><ol type="1" id="15f58ca9-7d9f-808e-bccb-c8e9251658f9" class="numbered-list" start="1"><li>Baixe o Kibana:<ul id="15f58ca9-7d9f-803a-8a3f-fde678dcdf60" class="bulleted-list"><li style="list-style-type:disc">Acesse: <a href="https://www.elastic.co/downloads/kibana">Elastic Downloads</a>.</li></ul><ul id="15f58ca9-7d9f-80b2-b34f-e3c6942645e2" class="bulleted-list"><li style="list-style-type:disc">Baixe o <strong>ZIP</strong> correspondente.</li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-8054-b5c1-c550680bf1bf" class="numbered-list" start="2"><li>Extraia o conteúdo para uma pasta:<p id="15f58ca9-7d9f-8070-840f-d68f7da914dc" class=""><code>C:\elk\kibana</code>.</p></li></ol><ol type="1" id="15f58ca9-7d9f-8005-a65d-e1e85ff04d36" class="numbered-list" start="3"><li>Configure o arquivo <code>kibana.yml</code>:<ul id="15f58ca9-7d9f-808a-91d7-c2d44e1ce049" class="bulleted-list"><li style="list-style-type:disc">Acesse <code>C:\elk\kibana\config\kibana.yml</code> e modifique:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-80fe-b94e-c3552bc433a1" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">
+server.port: 5601
+server.host: &quot;127.0.0.1&quot;
+elasticsearch.hosts: [&quot;http://localhost:9200&quot;]
+
+</code></pre></li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-80f3-bd3f-e2c97429aaa3" class="numbered-list" start="4"><li>Inicie o Kibana:<ul id="15f58ca9-7d9f-80ae-ac69-ca9508369c4e" class="bulleted-list"><li style="list-style-type:disc">No <strong>Prompt de Comando</strong>, vá para a pasta <code>bin</code>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-8057-991c-c7034b061971" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">
+cd C:\elk\kibana\bin
+kibana.bat
+
+-- Lembre de mudar seu C: para o caminho da sua maquina</code></pre></li></ul><ul id="15f58ca9-7d9f-80ab-a782-c9a3fb3dd3ee" class="bulleted-list"><li style="list-style-type:disc">Aguarde a inicialização.</li></ul><ul id="15f58ca9-7d9f-80e6-9f43-d5e9a6cbfdef" class="bulleted-list"><li style="list-style-type:disc">Acesse o Kibana no navegador: http://localhost:5601.</li></ul></li></ol><hr id="15f58ca9-7d9f-80b1-b8dd-fb1fdcf2214f"/><h2 id="15f58ca9-7d9f-804b-b5b9-f2b9700a9926" class=""><strong>Passo 4: Instalação do Logstash</strong></h2><ol type="1" id="15f58ca9-7d9f-808e-b4cf-cc173e10ba3b" class="numbered-list" start="1"><li>Baixe o Logstash:<ul id="15f58ca9-7d9f-806f-859b-e3db50889a2f" class="bulleted-list"><li style="list-style-type:disc">Acesse: <a href="https://www.elastic.co/downloads/logstash">Elastic Downloads</a>.</li></ul><ul id="15f58ca9-7d9f-80ae-8eb5-c05245828ca7" class="bulleted-list"><li style="list-style-type:disc">Baixe o <strong>ZIP</strong> do Logstash.</li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-8045-8d7e-cf2a875ae82c" class="numbered-list" start="2"><li>Extraia o conteúdo para uma pasta:<p id="15f58ca9-7d9f-8099-bf03-df32850f8189" class=""><code>C:\elk\logstash</code>.</p></li></ol><ol type="1" id="15f58ca9-7d9f-8034-85bb-c451ba8d2c8f" class="numbered-list" start="3"><li>Configure o arquivo <code>logstash.conf</code>:<ul id="15f58ca9-7d9f-8052-acda-cd9bb504bab4" class="bulleted-list"><li style="list-style-type:disc">Crie um arquivo chamado <code>logstash.conf</code> em <code>C:\elk\logstash\config</code>.</li></ul><ul id="15f58ca9-7d9f-80b8-a5fc-ee8e6e2f78c1" class="bulleted-list"><li style="list-style-type:disc">Adicione a configuração básica para ingerir logs simples:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-8073-b015-f5c8327779d4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">
+input {
+  file {
+    path =&gt; &quot;C:/elk/logs/teste.log&quot;
+    start_position =&gt; &quot;beginning&quot;
+  }
+}
+
+output {
+  elasticsearch {
+    hosts =&gt; [&quot;http://localhost:9200&quot;]
+    index =&gt; &quot;logstash-test&quot;
+  }
+  stdout { codec =&gt; rubydebug }
+}
+
+-- Lembre de mudar seu C: para o caminho da sua maquina
+</code></pre></li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-809c-a557-dcc957da377a" class="numbered-list" start="4"><li>Crie um arquivo de logs para teste:<ul id="15f58ca9-7d9f-80a5-99f5-fcb72d3de0c5" class="bulleted-list"><li style="list-style-type:disc">No diretório <code>C:\elk\logs</code>, crie um arquivo chamado <code>teste.log</code> e adicione algumas linhas:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-807e-bf3d-c0b24a548f6c" class="code"><code class="language-C#" style="white-space:pre-wrap;word-break:break-all">
+[INFO] Log de teste - Primeira linha
+[ERROR] Log de teste - Erro fictício
+
+</code></pre></li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-8003-aff7-f92531e21d7c" class="numbered-list" start="5"><li>Execute o Logstash:<ul id="15f58ca9-7d9f-8077-b55f-f29c5e254a02" class="bulleted-list"><li style="list-style-type:disc">No <strong>Prompt de Comando</strong>, vá até a pasta <code>bin</code> do Logstash:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="15f58ca9-7d9f-80fb-9774-d99a0c73cf17" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">
+cd C:\elk\logstash\bin
+logstash.bat -f C:\elk\logstash\config\logstash.conf
+
+</code></pre></li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-8058-bb79-dd88f2488f7a" class="numbered-list" start="6"><li>Verifique no Elasticsearch:<ul id="15f58ca9-7d9f-8036-b5ce-cef584d6ff23" class="bulleted-list"><li style="list-style-type:disc">No navegador, acesse:http://localhost:9200/logstash-test/_search.</li></ul><ul id="15f58ca9-7d9f-806d-950d-c918b171c629" class="bulleted-list"><li style="list-style-type:disc">Os logs deverão aparecer no JSON.</li></ul></li></ol><hr id="15f58ca9-7d9f-8067-a941-c7713fbe4d64"/><h2 id="15f58ca9-7d9f-803b-95b6-e9fca80cfb24" class=""><strong>Passo 5: Visualização de Dados no Kibana</strong></h2><ol type="1" id="15f58ca9-7d9f-8050-9f59-d02ddfcb722b" class="numbered-list" start="1"><li>Acesse o Kibana:<p id="15f58ca9-7d9f-8039-9e3c-f9afbed8a501" class="">http://localhost:5601.</p></li></ol><ol type="1" id="15f58ca9-7d9f-80e6-81c8-cc86e0b201f3" class="numbered-list" start="2"><li>Configure o <strong>Index Pattern</strong>:<ul id="15f58ca9-7d9f-807a-aaa5-e3534ef13f04" class="bulleted-list"><li style="list-style-type:disc">No menu lateral, vá em <strong>Management</strong> → <strong>Stack Management</strong> → <strong>Index Patterns</strong>.</li></ul><ul id="15f58ca9-7d9f-8098-bf87-ea0fc56353e5" class="bulleted-list"><li style="list-style-type:disc">Clique em <strong>Create Index Pattern</strong>.</li></ul><ul id="15f58ca9-7d9f-8068-aeef-e8f9ac73aa82" class="bulleted-list"><li style="list-style-type:disc">Nome do padrão: <code>logstash-*</code>.</li></ul><ul id="15f58ca9-7d9f-8045-8143-e80a1fef06e8" class="bulleted-list"><li style="list-style-type:disc">Configure o campo de tempo, se necessário.</li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-8096-a931-dc7e30d3a043" class="numbered-list" start="3"><li>Explore os dados:<ul id="15f58ca9-7d9f-8041-a028-c9dbe8ff3ba6" class="bulleted-list"><li style="list-style-type:disc">Vá até <strong>Discover</strong> no menu lateral.</li></ul><ul id="15f58ca9-7d9f-8031-abc3-e367e9989d0e" class="bulleted-list"><li style="list-style-type:disc">Seus logs deverão aparecer listados.</li></ul></li></ol><ol type="1" id="15f58ca9-7d9f-8064-aefd-ee9de2e9361c" class="numbered-list" start="4"><li>Crie um Dashboard:<ul id="15f58ca9-7d9f-8024-b970-d2cf0003a52d" class="bulleted-list"><li style="list-style-type:disc">Vá em <strong>Dashboard</strong> → <strong>Create New Dashboard</strong>.</li></ul><ul id="15f58ca9-7d9f-8000-bbf2-cf613c996ce8" class="bulleted-list"><li style="list-style-type:disc">Adicione gráficos, tabelas ou visualizações baseados nos dados de logs.</li></ul></li></ol><hr id="15f58ca9-7d9f-80c4-b829-d33b6f425a98"/><h2 id="15f58ca9-7d9f-8069-a11f-dc5a7694c334" class=""><strong>Resumo das Portas Utilizadas</strong></h2><ul id="15f58ca9-7d9f-80f9-a91d-d8b2a25502ed" class="bulleted-list"><li style="list-style-type:disc"><strong>Elasticsearch</strong>: Porta <strong>9200</strong></li></ul><ul id="15f58ca9-7d9f-80be-b6cd-cbd371d32fa8" class="bulleted-list"><li style="list-style-type:disc"><strong>Kibana</strong>: Porta <strong>5601</strong></li></ul><ul id="15f58ca9-7d9f-80a6-bef3-fe20833b382c" class="bulleted-list"><li style="list-style-type:disc"><strong>Logstash</strong>: Conexões configuradas nos arquivos.</li></ul><hr id="15f58ca9-7d9f-8054-9980-d134d2fc2337"/><h2 id="15f58ca9-7d9f-80cb-a9b9-e2775f5ae88a" class=""><strong>Demonstração Completa</strong></h2><ol type="1" id="15f58ca9-7d9f-801c-82ca-d095660fbac3" class="numbered-list" start="1"><li>Elasticsearch está rodando em <code>http://localhost:9200</code>.</li></ol><ol type="1" id="15f58ca9-7d9f-805a-a83f-ca439c5fa26e" class="numbered-list" start="2"><li>Kibana está rodando em <code>http://localhost:5601</code> e mostra os logs.</li></ol><ol type="1" id="15f58ca9-7d9f-80c4-af45-e9ecc06f0473" class="numbered-list" start="3"><li>Logstash está ingerindo o arquivo <code>teste.log</code> e enviando os dados para o Elasticsearch.</li></ol><p id="15f58ca9-7d9f-8092-bb77-e2dfc25e7795" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
